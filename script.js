@@ -273,7 +273,6 @@ function autoSkipDueToTimeout() {
     goToNextOrEnd();
 }
 
-// 🌟 ማብራሪያውን ያለምንም መመሰቃቀል በካርድ ከፋፍሎ በሮማን ቁጥር የሚያስቀምጠው ዘመናዊ ፈንክሽን
 function formatExplanationToRomanStructure(rawText) {
     if (!rawText || rawText.trim() === "") {
         return `<p style="color: var(--text-light); font-style: italic;">ምንም አይነት ማብራሪያ አልተገኘም።</p>`;
