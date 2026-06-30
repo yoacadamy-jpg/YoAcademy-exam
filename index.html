@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YOAcademy Portal - Advanced Exit Exam Center</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="quiz-container">
+        <!-- SCREEN 1: WELCOME & DEPARTMENT SELECTION -->
+        <div id="welcome-screen" class="screen active">
+            <div class="brand-hero">
+                <!-- ተማሪው ሁሌም የሚያየው የተዋበ የሎጎ ማሳያ -->
+                <div class="brand-logo-wrapper">
+                    <img src="logo.png" alt="YOAcademy Logo" class="main-brand-logo">
+                </div>
+                <div class="logo-large">YO<span>Academy</span></div>
+                <p class="tagline">NATIONAL EXIT EXAM TESTING PORTAL</p>
+            </div>
+            
+            <div class="selection-card">
+                <h2>እንኳን ወደ ፈተና ማዕከል በደህና መጡ!</h2>
+                <p>እባክዎ ፈተናውን ለመጀመር ዲፓርትመንትዎን ይምረጡ፦</p>
+                
+                <div class="dept-grid">
+                    <button class="dept-btn" onclick="openBlueprint('med_lab')">🔬 Medical Laboratory Science</button>
+                    <button class="dept-btn" onclick="openBlueprint('business')">💼 Business Management</button>
+                    <button class="dept-btn disabled" disabled>🩺 Nursing (Coming Soon)</button>
+                    <button class="dept-btn disabled" disabled>💊 Pharmacy (Coming Soon)</button>
+                    <button class="dept-btn disabled" disabled>📊 Accounting & Finance (Coming Soon)</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 2: BLUEPRINT & CONFIGURATION -->
+        <div id="blueprint-screen" class="screen">
+            <div class="brand-hero">
+                <div class="brand-logo-wrapper small-brand-logo">
+                    <img src="logo.png" alt="YOAcademy Logo">
+                </div>
+                <div class="logo-large">YO<span>Academy</span></div>
+                <div id="blueprint-badge" class="blueprint-badge-text">Ministry of Education Blueprint</div>
+            </div>
+            <h3 id="blueprint-title-text" style="color: var(--primary); margin-bottom: 15px;">የማለማመጃ ቴሞችን ይምረጡ</h3>
+            
+            <!-- ጥያቄ ብዛት መምረጫ (5 ጥያቄዎች ተጨምረዋል) -->
+            <div class="config-zone">
+                <label for="question-count-select">⏳ የጥያቄዎች ብዛት ይምረጡ፦</label>
+                <select id="question-count-select" onchange="handleCountChange()">
+                    <option value="5">5 ጥያቄዎች (ክፍለ-ጊዜ)</option>
+                    <option value="10">10 ጥያቄዎች</option>
+                    <option value="15">15 ጥያቄዎች</option>
+                    <option value="20">20 ጥያቄዎች</option>
+                    <option value="25" selected>25 ጥያቄዎች (Standard)</option>
+                    <option value="all">ሁሉንም ጥያቄዎች አምጣ</option>
+                </select>
+            </div>
+
+            <div id="blueprint-list-container" class="blueprint-container"></div>
+            
+            <button onclick="goBackToWelcome()" class="back-link">⬅️ ወደ ዲፓርትመንት መምረጫ ተመለስ</button>
+        </div>
+
+        <!-- SCREEN 3: QUIZ CORE AREA -->
+        <div id="quiz-screen" class="screen">
+            <header>
+                <div class="quiz-header-left">
+                    <img src="logo.png" alt="YOAcademy Logo" class="header-logo-img">
+                    <div class="logo">YO<span>Academy</span></div>
+                </div>
+                <div class="quiz-meta">
+                    <div class="meta-item" id="question-counter">ጥያቄ፡ 0/0</div>
+                    <div class="meta-item-timer" id="timer-box">⏱️ 01:00</div>
+                </div>
+            </header>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="quiz-progress"></div>
+            </div>
+
+            <div id="quiz-box"></div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="action-buttons-group">
+                <button id="skip-btn" class="btn-action btn-skip" onclick="skipQuestion()">⏩ ሳልመልስ እለፍ (Skip)</button>
+                <button id="submit-btn" class="btn-action btn-verify" onclick="submitAnswer()">✔ መልስ መርምር (Verify)</button>
+                <button id="next-btn" class="btn-action btn-next" onclick="nextQuestion()" style="display: none;">ቀጣይ ጥያቄ ➡</button>
+            </div>
+        </div>
+
+        <!-- SCREEN 4: INTUITIVE ANALYTICS DASHBOARD -->
+        <div id="score-screen" class="screen">
+            <div class="score-card">
+                <div class="brand-logo-wrapper small-brand-logo" style="margin: 0 auto 15px auto;">
+                    <img src="logo.png" alt="YOAcademy Logo">
+                </div>
+                <div class="trophy-icon" id="result-emoji">📊</div>
+                <h2 id="result-status-title">የፈተና ማጠቃለያ</h2>
+                <div id="result-badge-container"></div>
+                
+                <div class="stats-container">
+                    <div class="stat-box success-box">
+                        <span id="stat-correct-count" class="stat-val">0</span>
+                        <span class="stat-lbl">በትክክል የተመለሰ</span>
+                    </div>
+                    <div class="stat-box danger-box">
+                        <span id="stat-wrong-count" class="stat-val">0</span>
+                        <span class="stat-lbl">የተሳሳተ መልስ</span>
+                    </div>
+                    <div class="stat-box skipped-box">
+                        <span id="stat-skipped-count" class="stat-val">0</span>
+                        <span class="stat-lbl">የታለፈ (የተዘለለ)</span>
+                    </div>
+                </div>
+
+                <div class="percentage-display">
+                    አጠቃላይ ውጤት፡ <span id="final-percentage">0%</span>
+                </div>
+
+                <div id="review-zone" class="retry-options-wrapper"></div>
+
+                <button onclick="resetToHome()" class="btn-home-back">
+                    🔄 ወደ ዋናው መግቢያ ገጽ ተመለስ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
