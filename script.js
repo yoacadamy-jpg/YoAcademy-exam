@@ -251,9 +251,7 @@ function submitAnswer() {
     }
 
     q.userSelectedAnswer = selectedOption; 
-
-    // ፈተናው ላይ ለጊዜው የሚታየውን ማብራሪያ በሮማን ቁጥር ማስተካከያ
-    renderFeedbackBox(isCorrect, q.Explanation || q.explanation || "No extended explanation provided.");
+    renderFeedbackBox(isCorrect, q.Explanation || q.explanation || "");
 }
 
 function skipQuestion() {
@@ -275,23 +273,75 @@ function autoSkipDueToTimeout() {
     goToNextOrEnd();
 }
 
+// 🌟 ማብራሪያውን ያለምንም መመሰቃቀል በካርድ ከፋፍሎ በሮማን ቁጥር የሚያስቀምጠው ዘመናዊ ፈንክሽን
+function formatExplanationToRomanStructure(rawText) {
+    if (!rawText || rawText.trim() === "") {
+        return `<p style="color: var(--text-light); font-style: italic;">ምንም አይነት ማብራሪያ አልተገኘም።</p>`;
+    }
+    
+    let sentences = rawText.split(/(?<=\. )/g).map(s => s.trim()).filter(s => s.length > 0);
+    
+    let part1 = sentences.slice(0, 2).join(" "); 
+    let part2 = sentences.slice(2).join(" ");     
+    
+    if (!part2) {
+        part1 = rawText;
+        part2 = "በብሉፕሪንቱ መሠረት የተሰጡትን ሌሎች አማራጮች ስናይ ከዋናው ሳይንሳዊ ፅንሰ-ሀሳብ ጋር ቀጥተኛ ግንኙነት የሌላቸው ወይም የተሳሳቱ መላምቶች ናቸው።";
+    }
+
+    return `
+        <div class="modern-roman-box">
+            <!-- PART I -->
+            <div class="roman-section">
+                <div class="roman-header">
+                    <span class="roman-numeral">I</span>
+                    <h4>ትክክለኛው መልስ ሳይንሳዊ ትንተና (Rationale)</h4>
+                </div>
+                <div class="roman-body">
+                    <p><span class="highlight-bullet">💡</span> ${part1}</p>
+                </div>
+            </div>
+
+            <!-- PART II -->
+            <div class="roman-section">
+                <div class="roman-header">
+                    <span class="roman-numeral">II</span>
+                    <h4>ሌሎች ምርጫዎች የተገለሉበት ምክንያት (Elimination)</h4>
+                </div>
+                <div class="roman-body">
+                    <p><span class="highlight-bullet">🔍</span> ${part2}</p>
+                </div>
+            </div>
+
+            <!-- PART III -->
+            <div class="roman-section">
+                <div class="roman-header">
+                    <span class="roman-numeral">III</span>
+                    <h4>ቁልፍ የፈተና ማስታወሻ (Blueprint Exam Takeaway)</h4>
+                </div>
+                <div class="roman-body font-accent-block">
+                    <p><span class="highlight-bullet">🎯</span> ተመሳሳይ የብሉፕሪንት ጥያቄዎች በፈተና ላይ ሲመጡ የተሳሳቱ አማራጮችን በፍጥነት ለማግለል ከላይ የተቀመጠውን ሳይንሳዊ መርህ በጥንቃቄ ያስታውሱ።</p>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
 function renderFeedbackBox(isCorrect, explanationText) {
     document.getElementById('submit-btn').style.display = 'none';
     document.getElementById('skip-btn').style.display = 'none';
     document.getElementById('next-btn').style.display = 'inline-block';
 
     let feedbackZone = document.getElementById('dynamic-feedback-zone');
+    let structuredExplanation = formatExplanationToRomanStructure(explanationText);
+
     feedbackZone.innerHTML = `
         <div class="status-banner ${isCorrect ? 'status-correct' : 'status-wrong'}">
             ${isCorrect ? '🎉 በትክክል ተመልሷል!' : '❌ መልስዎ አልተሳካም!'}
         </div>
         <div class="explanation-box">
-            <h4>💡 Scientific Rationale & Analysis:</h4>
-            <div class="roman-explanation-list">
-                <p><strong>I. Core Concept:</strong> Overview of the fundamental blueprint standard principles.</p>
-                <p><strong>II. Rationale Breakdown:</strong> ${explanationText}</p>
-                <p><strong>III. Exam Takeaway:</strong> Key indicator to identify and solve similar questions easily.</p>
-            </div>
+            <h4>💡 Scientific Rationale & Options Analysis:</h4>
+            ${structuredExplanation}
         </div>
     `;
 }
@@ -365,7 +415,6 @@ function endQuizAndShowDashboard() {
         </div>
     `;
 
-    // *** የስተካከለው የዳሽቦርድ ማብራሪያ (የሮማን ቁጥሮች አቀራረብ) ***
     let scrollZone = document.getElementById('detailed-explanations-scroll-zone');
     scrollZone.innerHTML = "";
 
@@ -385,7 +434,8 @@ function endQuizAndShowDashboard() {
 
         let userAns = q.userSelectedAnswer || "None";
         let correctAns = (q.CorrectAnswer || q.correct || "").trim().toUpperCase().charAt(0);
-        let explanationText = q.Explanation || q.explanation || "No extended explanation document loadable.";
+        let explanationText = q.Explanation || q.explanation || "";
+        let structuredExplanation = formatExplanationToRomanStructure(explanationText);
 
         scrollZone.innerHTML += `
             <div class="${cardClass}">
@@ -401,12 +451,8 @@ function endQuizAndShowDashboard() {
                 </div>
 
                 <div class="report-explanation-box">
-                    <h5>💡 Scientific Rationale & Concept Breakthrough:</h5>
-                    <div class="roman-explanation-list">
-                        <p><strong>I. Core Concept:</strong> Systematic verification and analysis of the foundational standard criteria.</p>
-                        <p><strong>II. Detailed Breakdown:</strong> ${explanationText}</p>
-                        <p><strong>III. Key Takeaway:</strong> Vital concept integration required to accurately distinguish this category in the upcoming National Exit Exam.</p>
-                    </div>
+                    <h5>💡 Scientific Rationale & Performance Breakdown:</h5>
+                    ${structuredExplanation}
                 </div>
             </div>
         `;
