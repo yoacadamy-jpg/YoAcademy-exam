@@ -8,7 +8,7 @@ let isAnswerRevealed = false;
 let correctQuestions = [];
 let wrongQuestions = [];
 let skippedQuestions = [];
-let totalAllowedQuestions = 25; // Default Standard
+let totalAllowedQuestions = 25; 
 
 let questionTimerInterval;
 let timeRemaining = 60;
@@ -20,15 +20,12 @@ function openBlueprint(dept) {
     
     const titleText = document.getElementById('blueprint-title-text');
     const listContainer = document.getElementById('blueprint-list-container');
-    const quizTitleDisplay = document.getElementById('quiz-title-display');
     
     if (dept === 'med_lab') {
-        titleText.innerText = "🔬 የላቦራቶሪ ዘርф ኮርሶችን ይምረጡ";
-        quizTitleDisplay.innerText = "Medical Laboratory Science Exit Exam Center";
+        titleText.innerText = "🔬 የላቦራቶሪ ዘርፍ ኮርሶችን ይምረጡ";
         renderMedLabBlueprints(listContainer);
     } else if (dept === 'business') {
         titleText.innerText = "💼 የቢዝነስ ማኔጅመንት ኮርሶችን ይምረጡ";
-        quizTitleDisplay.innerText = "Business Management Exit Exam Center";
         renderBusinessBlueprints(listContainer);
     }
 }
@@ -253,12 +250,16 @@ function submitAnswer() {
         skippedQuestions = skippedQuestions.filter(item => item !== q);
     }
 
+    q.userSelectedAnswer = selectedOption; 
+
+    // ፈተናው ላይ ለጊዜው የሚታየውን ማብራሪያ በሮማን ቁጥር ማስተካከያ
     renderFeedbackBox(isCorrect, q.Explanation || q.explanation || "No extended explanation provided.");
 }
 
 function skipQuestion() {
     clearInterval(questionTimerInterval);
     let q = filteredQuestions[currentQuestionIndex];
+    q.userSelectedAnswer = 'Skipped';
     if (!skippedQuestions.includes(q) && !correctQuestions.includes(q) && !wrongQuestions.includes(q)) {
         skippedQuestions.push(q);
     }
@@ -267,6 +268,7 @@ function skipQuestion() {
 
 function autoSkipDueToTimeout() {
     let q = filteredQuestions[currentQuestionIndex];
+    q.userSelectedAnswer = 'Timeout';
     if (!skippedQuestions.includes(q) && !correctQuestions.includes(q) && !wrongQuestions.includes(q)) {
         skippedQuestions.push(q);
     }
@@ -285,8 +287,10 @@ function renderFeedbackBox(isCorrect, explanationText) {
         </div>
         <div class="explanation-box">
             <h4>💡 Scientific Rationale & Analysis:</h4>
-            <div class="scrollable-rationale-content">
-                <p>${explanationText}</p>
+            <div class="roman-explanation-list">
+                <p><strong>I. Core Concept:</strong> Overview of the fundamental blueprint standard principles.</p>
+                <p><strong>II. Rationale Breakdown:</strong> ${explanationText}</p>
+                <p><strong>III. Exam Takeaway:</strong> Key indicator to identify and solve similar questions easily.</p>
             </div>
         </div>
     `;
@@ -308,6 +312,8 @@ function goToNextOrEnd() {
 
 function endQuizAndShowDashboard() {
     clearInterval(questionTimerInterval);
+    
+    document.getElementById('main-quiz-container').classList.add('expanded-dashboard-view');
     document.getElementById('quiz-screen').classList.remove('active');
     document.getElementById('score-screen').classList.add('active');
 
@@ -315,7 +321,6 @@ function endQuizAndShowDashboard() {
     let totalQuestions = filteredQuestions.length;
     let percentage = totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0;
 
-    // እሴቶችን በGoogle ስታይል ማሳያ ላይ መጫን
     document.getElementById('google-score-val').innerText = `${correctCount}/${totalQuestions}`;
     document.getElementById('google-accuracy-val').innerText = `${percentage}%`;
     
@@ -323,53 +328,89 @@ function endQuizAndShowDashboard() {
     document.getElementById('stat-wrong-count').innerText = wrongQuestions.length;
     document.getElementById('stat-skipped-count').innerText = skippedQuestions.length;
 
-    // የማለፍ/አለማለፍ ማሳያ
-    const badgeContainer = document.getElementById('badge-pass-fail-container');
-    if (percentage >= 50) {
-        badgeContainer.innerHTML = `<button class="btn-analyze-perf pass-theme">Analyze my performance</button>`;
-    } else {
-        badgeContainer.innerHTML = `<button class="btn-analyze-perf fail-theme">Analyze my performance</button>`;
-    }
-
     let reviewZone = document.getElementById('review-zone');
     reviewZone.innerHTML = "";
 
-    // 1. የተሳሳቱ ካሉ
     if (wrongQuestions.length > 0) {
         reviewZone.innerHTML += `
-            <div class="learning-card card-wrong" onclick="retrySpecificSet('wrong')">
-                <div class="card-icon">❌</div>
-                <div class="card-info">
-                    <h4>Review Wrong Questions</h4>
-                    <p>Create a focus test from the ${wrongQuestions.length} questions you missed to master key concepts.</p>
+            <div class="learning-action-item action-wrong" onclick="retrySpecificSet('wrong')">
+                <span class="action-icon">❌</span>
+                <div class="action-details">
+                    <h4>Review Wrong (${wrongQuestions.length})</h4>
+                    <p>የተሳሳቱትን ብቻ በድጋሚ ፈትን</p>
                 </div>
             </div>
         `;
     }
 
-    // 2. የታለፉ ካሉ
     if (skippedQuestions.length > 0) {
         reviewZone.innerHTML += `
-            <div class="learning-card card-skipped" onclick="retrySpecificSet('skipped')">
-                <div class="card-icon">⏩</div>
-                <div class="card-info">
-                    <h4>Study Skipped Items</h4>
-                    <p>Review the ${skippedQuestions.length} skipped questions you left unanswered during the quiz.</p>
+            <div class="learning-action-item action-skipped" onclick="retrySpecificSet('skipped')">
+                <span class="action-icon">⏩</span>
+                <div class="action-details">
+                    <h4>Study Skipped (${skippedQuestions.length})</h4>
+                    <p>ያለፍካቸውን ጥያቄዎች ብቻ እይ</p>
                 </div>
             </div>
         `;
     }
     
-    // 3. ሙሉውን እንደገና ለመጀመር (More Questions)
     reviewZone.innerHTML += `
-        <div class="learning-card card-all" onclick="retrySpecificSet('all')">
-            <div class="card-icon">🔄</div>
-            <div class="card-info">
-                <h4>More Questions / Restart</h4>
-                <p>Generate a completely fresh session or reshuffle the current quiz material from scratch.</p>
+        <div class="learning-action-item action-all" onclick="retrySpecificSet('all')">
+            <span class="action-icon">🔄</span>
+            <div class="action-details">
+                <h4>Restart Fresh Quiz</h4>
+                <p>ሁሉንም ጥያቄዎች አደባልቀህ እንደገና ጀምር</p>
             </div>
         </div>
     `;
+
+    // *** የስተካከለው የዳሽቦርድ ማብራሪያ (የሮማን ቁጥሮች አቀራረብ) ***
+    let scrollZone = document.getElementById('detailed-explanations-scroll-zone');
+    scrollZone.innerHTML = "";
+
+    filteredQuestions.forEach((q, idx) => {
+        let isCorrect = correctQuestions.includes(q);
+        let isSkipped = skippedQuestions.includes(q);
+        
+        let cardClass = "explanation-report-card border-wrong";
+        let statusTag = "❌ Incorrect";
+        if (isCorrect) {
+            cardClass = "explanation-report-card border-correct";
+            statusTag = "✔ Correct";
+        } else if (isSkipped) {
+            cardClass = "explanation-report-card border-skipped";
+            statusTag = "⏩ Skipped";
+        }
+
+        let userAns = q.userSelectedAnswer || "None";
+        let correctAns = (q.CorrectAnswer || q.correct || "").trim().toUpperCase().charAt(0);
+        let explanationText = q.Explanation || q.explanation || "No extended explanation document loadable.";
+
+        scrollZone.innerHTML += `
+            <div class="${cardClass}">
+                <div class="report-card-header">
+                    <span class="report-q-num">QUESTION ${idx + 1}</span>
+                    <span class="report-status-badge">${statusTag}</span>
+                </div>
+                <div class="report-question-text">${q.Question || q.question}</div>
+                
+                <div class="report-choices-info">
+                    <p>🎯 Correct Choice: <strong>Option ${correctAns}</strong></p>
+                    <p>👤 Your Answer: <strong class="${isCorrect ? 'text-success' : 'text-danger'}">${userAns === 'Skipped' ? 'የታለፈ (Skipped)' : 'Option ' + userAns}</strong></p>
+                </div>
+
+                <div class="report-explanation-box">
+                    <h5>💡 Scientific Rationale & Concept Breakthrough:</h5>
+                    <div class="roman-explanation-list">
+                        <p><strong>I. Core Concept:</strong> Systematic verification and analysis of the foundational standard criteria.</p>
+                        <p><strong>II. Detailed Breakdown:</strong> ${explanationText}</p>
+                        <p><strong>III. Key Takeaway:</strong> Vital concept integration required to accurately distinguish this category in the upcoming National Exit Exam.</p>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
 }
 
 function retrySpecificSet(type) {
@@ -386,6 +427,7 @@ function retrySpecificSet(type) {
     wrongQuestions = [];
     skippedQuestions = [];
 
+    document.getElementById('main-quiz-container').classList.remove('expanded-dashboard-view');
     document.getElementById('score-screen').classList.remove('active');
     document.getElementById('quiz-screen').classList.add('active');
     
@@ -395,6 +437,7 @@ function retrySpecificSet(type) {
 
 function resetToHome() {
     clearInterval(questionTimerInterval);
+    document.getElementById('main-quiz-container').classList.remove('expanded-dashboard-view');
     document.getElementById('score-screen').classList.remove('active');
     document.getElementById('welcome-screen').classList.add('active');
 }

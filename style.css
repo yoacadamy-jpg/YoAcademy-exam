@@ -24,6 +24,7 @@ body {
     padding: 20px;
 }
 
+/* ዋናው መያዣ ኮንቴይነር */
 .quiz-container {
     background: #ffffff;
     width: 100%;
@@ -32,6 +33,13 @@ body {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
     padding: 40px;
     position: relative;
+    transition: max-width 0.4s ease, width 0.4s ease;
+}
+
+/* ዳሽቦርዱ ጎን ለጎን ሲሆን ኮንቴይነሩ በሰፊው ይለጠጣል */
+.expanded-dashboard-view {
+    max-width: 1250px !important;
+    padding: 30px !important;
 }
 
 .screen { display: none; }
@@ -44,43 +52,54 @@ body {
 
 /* BRAND LOGO PREMIUM STYLING */
 .brand-logo-wrapper {
-    width: 100px;
-    height: 100px;
+    width: 110px;
+    height: 110px;
     margin: 0 auto 15px auto;
     border-radius: 50%;
-    padding: 5px;
+    padding: 0; 
     background: white;
-    box-shadow: 0 8px 20px rgba(30, 58, 138, 0.15);
-    border: 3px solid var(--accent);
+    box-shadow: 0 8px 24px rgba(30, 58, 138, 0.15);
+    border: 3.5px solid var(--accent);
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden; 
 }
 
 .brand-logo-wrapper img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    border-radius: 50%;
+    object-fit: cover; 
 }
 
 .small-brand-logo {
-    width: 70px;
-    height: 70px;
+    width: 80px;
+    height: 80px;
+}
+
+/* በፈተና ወቅት ከላይ ለሚታየው ሎጎ */
+.header-logo-container-circle {
+    width: 44px;
+    height: 44px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid var(--accent);
+    overflow: hidden;
+}
+
+.header-logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .quiz-header-left {
     display: flex;
     align-items: center;
     gap: 12px;
-}
-
-.header-logo-img {
-    width: 40px;
-    height: 40px;
-    object-fit: contain;
-    border-radius: 50%;
-    border: 2px solid var(--accent);
 }
 
 /* Brand Headers */
@@ -163,278 +182,323 @@ header {
 .status-correct { background: #d1fae5; color: #065f46; }
 .status-wrong { background: #fee2e2; color: #991b1b; }
 
-/* SCROLLABLE RATIONALE BOX WITHOUT FULL SCREEN EXTENSION */
+/* ATTRACTIVE EXPLANATION BOX INSIDE QUIZ */
 .explanation-box { 
-    background: #fffdf5; 
+    background: #fffcf0; 
     border-left: 5px solid var(--accent); 
-    padding: 16px; 
-    border-radius: 8px; 
-    margin-top: 15px; 
+    padding: 20px; 
+    border-radius: 12px; 
+    margin-top: 20px; 
     text-align: left; 
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.06);
 }
-.explanation-box h4 { color: #b45309; font-size: 14px; font-weight: 700; margin-bottom: 5px; }
+.explanation-box h4 { color: #b45309; font-size: 15px; font-weight: 700; margin-bottom: 8px; }
 
-.scrollable-rationale-content {
-    max-height: 120px;
-    overflow-y: auto;
-    padding-right: 5px;
+/* NEW ROMAN NUMERALS EXPLANTION STYLING */
+.roman-explanation-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
 }
-.scrollable-rationale-content p {
-    font-size: 14px; 
-    color: #4b5563; 
+
+.roman-explanation-list p {
+    font-size: 13.8px;
+    color: #374151;
     line-height: 1.6;
+    font-weight: 500;
+    padding-left: 2px;
 }
-.scrollable-rationale-content::-webkit-scrollbar { width: 5px; }
-.scrollable-rationale-content::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 
-
-/* =======================================================
-   GOOGLE QUIZ STYLE PREMIUM SCORE DASHBOARD (DARK THEME)
-   ======================================================= */
-
-.google-result-logo {
-    width: 35px !important;
-    height: 35px !important;
-    object-fit: contain;
-    border-radius: 50%;
-    border: 2px solid var(--accent);
+.roman-explanation-list strong {
+    color: #1e3a8a; 
+    letter-spacing: 0.5px;
     display: inline-block;
-    vertical-align: middle;
+    margin-right: 5px;
 }
 
-#score-screen.screen.active {
-    background-color: #111827; /* Dark Grey/Black background like image 11.JPG */
-    color: #ffffff;
-    border-radius: 24px;
-    padding: 35px;
-    margin: -40px; /* ሳጥኑን ሙሉ በሙሉ ጥቁር ለማድረግ */
-    animation: fadeIn 0.4s ease;
-}
-
-.google-score-card {
+/* SIDE-BY-SIDE DASHBOARD LAYOUT */
+.premium-dashboard-layout {
+    display: grid;
+    grid-template-columns: 380px 1fr; 
+    gap: 25px;
     text-align: left;
 }
 
-.google-score-header {
-    margin-bottom: 25px;
+/* LEFT PANEL STYLING */
+.dashboard-left-panel {
+    background: #f8fafc;
+    border-right: 1px solid #e2e8f0;
+    padding-right: 25px;
+    display: flex;
+    flex-direction: column;
 }
 
-.header-main-title {
+.dashboard-brand-header {
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 15px;
-    color: #9ca3af;
-    font-weight: 500;
+    margin-bottom: 15px;
 }
 
-.complete-banner {
-    font-size: 32px;
+.google-logo-container {
+    width: 46px;
+    height: 46px;
+    background: #ffffff; 
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid var(--accent);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+    overflow: hidden;
+}
+
+.google-result-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.dashboard-brand-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.congrats-title {
+    font-size: 26px;
     font-weight: 700;
-    color: #ffffff;
-    margin-top: 10px;
+    color: var(--text-dark);
+    margin-bottom: 15px;
     letter-spacing: -0.5px;
 }
 
-/* የውጤት ጎን ለጎን አቀማመጥ (Grid) */
-.google-stats-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    background: #1f2937;
-    padding: 25px;
+/* Metrics Dashboard Card */
+.metrics-card {
+    background: white;
+    border: 1px solid #e2e8f0;
     border-radius: 16px;
-    margin-bottom: 25px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    margin-bottom: 20px;
 }
 
-.stat-left-block {
-    display: flex;
-    gap: 50px;
-}
-
-.google-stat-box {
-    display: flex;
-    flex-direction: column;
-}
-
-.google-label {
-    font-size: 14px;
-    color: #9ca3af;
-    font-weight: 500;
-    margin-bottom: 5px;
-}
-
-.google-value {
-    font-size: 40px;
-    font-weight: 700;
-    color: #ffffff;
-}
-
-/* የቀኝ በኩል ዝርዝር ረድፎች */
-.stat-right-block {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 10px;
-    border-left: 1px solid #374151;
-    padding-left: 40px;
-}
-
-.right-row {
+.metric-row {
     display: flex;
     justify-content: space-between;
-    font-size: 15px;
-    font-weight: 500;
-    color: #d1d5db;
-}
-
-.text-success span:first-child { color: #34d399; }
-.text-danger span:first-child { color: #f87171; }
-.text-skipped span:first-child { color: #9ca3af; }
-
-.row-val {
-    font-weight: 700;
-    color: #ffffff;
-}
-
-/* Performance Box */
-.strengths-section {
-    display: flex;
     align-items: center;
-    background: #1f2937;
-    padding: 20px;
-    border-radius: 16px;
-    gap: 15px;
-    margin-bottom: 30px;
+    margin-bottom: 8px;
 }
 
-.strength-icon {
-    font-size: 24px;
-    background: #374151;
-    padding: 10px;
-    border-radius: 12px;
+.metric-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-light);
 }
 
-.strength-text {
+.metric-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.metric-divider {
+    border-top: 1px solid #e2e8f0;
+    margin: 12px 0;
+}
+
+.mini-metrics-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.mini-stat {
+    font-size: 13.5px;
+    font-weight: 600;
+}
+
+.panel-section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 10px;
+}
+
+/* Action Items (Keep Learning List) */
+.dashboard-action-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     flex: 1;
 }
 
-.strength-text h3 {
-    font-size: 16px;
-    font-weight: 600;
-    color: #ffffff;
-    margin-bottom: 3px;
-}
-
-.strength-text p {
-    font-size: 13.5px;
-    color: #9ca3af;
-    line-height: 1.5;
-}
-
-/* የትንተና ሰማያዊ በተን */
-.btn-analyze-perf {
-    background: #0284c7;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 24px;
-    font-size: 13.5px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-.btn-analyze-perf:hover { background: #0369a1; }
-.pass-theme { background: #059669; }
-.fail-theme { background: #0284c7; }
-
-.google-divider {
-    border: 0;
-    border-top: 1px solid #374151;
-    margin: 25px 0;
-}
-
-.keep-learning-title {
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 15px;
-    color: #ffffff;
-}
-
-/* የታችኛው የመከለሻ ካርዶች (Keep Learning Grid) */
-.google-retry-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-}
-
-.google-retry-grid .learning-card:last-child:nth-child(odd) {
-    grid-column: span 2;
-}
-
-.learning-card {
-    background: #1f2937;
-    border: 1px solid #374151;
-    border-radius: 14px;
-    padding: 18px;
+.learning-action-item {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 12px 15px;
     display: flex;
-    gap: 14px;
-    align-items: flex-start;
+    align-items: center;
+    gap: 12px;
     cursor: pointer;
-    transition: transform 0.2s, background 0.2s;
+    transition: all 0.2s ease;
 }
 
-.learning-card:hover {
-    transform: translateY(-2px);
-    background: rgba(59, 130, 246, 0.15);
-    border-color: #3b82f6;
+.learning-action-item:hover {
+    transform: translateX(4px);
+    border-color: var(--primary);
+    background: #f0fdf4;
 }
 
-.card-icon {
-    font-size: 20px;
-    background: #374151;
-    padding: 8px;
-    border-radius: 10px;
+.action-icon {
+    font-size: 18px;
+    background: #f1f5f9;
+    padding: 6px;
+    border-radius: 8px;
 }
 
-.card-info h4 {
-    font-size: 15px;
+.action-details h4 {
+    font-size: 14px;
     font-weight: 600;
-    color: #ffffff;
-    margin-bottom: 4px;
+    color: var(--text-dark);
 }
 
-.card-info p {
-    font-size: 12.5px;
-    color: #9ca3af;
-    line-height: 1.5;
+.action-details p {
+    font-size: 12px;
+    color: var(--text-light);
 }
 
-.google-footer-actions {
-    text-align: center;
-    margin-top: 30px;
+.dashboard-footer {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #e2e8f0;
 }
 
 .btn-google-home {
     background: none;
     border: none;
-    color: #3b82f6;
+    color: #2563eb;
     font-weight: 600;
-    font-size: 14.5px;
+    font-size: 14px;
     cursor: pointer;
     text-decoration: underline;
 }
 
-.btn-google-home:hover {
-    color: #60a5fa;
+/* RIGHT PANEL: SCROLLABLE DETAILED ANALYTICS */
+.dashboard-right-panel {
+    display: flex;
+    flex-direction: column;
+    max-height: 580px;
+}
+
+.analytics-header {
+    margin-bottom: 15px;
+}
+
+.analytics-header h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.analytics-header p {
+    font-size: 13px;
+    color: var(--text-light);
+}
+
+.explanations-wrapper-zone {
+    overflow-y: auto;
+    padding-right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    flex: 1;
+}
+
+.explanations-wrapper-zone::-webkit-scrollbar {
+    width: 6px;
+}
+.explanations-wrapper-zone::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+/* የሪፖርት ማሳያ ነጠላ ካርድ */
+.explanation-report-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 18px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+}
+
+.border-correct { border-left: 5px solid var(--success); }
+.border-wrong { border-left: 5px solid var(--danger); }
+.border-skipped { border-left: 5px solid var(--text-light); }
+
+.report-card-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.report-q-num {
+    font-size: 11px;
+    font-weight: 700;
+    background: #f1f5f9;
+    color: var(--text-dark);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.report-status-badge {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.border-correct .report-status-badge { color: var(--success); }
+.border-wrong .report-status-badge { color: var(--danger); }
+.border-skipped .report-status-badge { color: var(--text-light); }
+
+.report-question-text {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--text-dark);
+    line-height: 1.5;
+    margin-bottom: 12px;
+}
+
+.report-choices-info {
+    background: #f8fafc;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+.report-choices-info p { margin-bottom: 3px; }
+
+/* የተሻሻለ የማብራሪያ ሳጥን */
+.report-explanation-box {
+    background: #fffdf5;
+    border: 1px solid #fef08a;
+    border-left: 4px solid var(--accent);
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.03);
+}
+
+.report-explanation-box h5 {
+    color: #ca8a04;
+    font-size: 13.5px;
+    font-weight: 700;
+    margin-bottom: 6px;
 }
 
 /* Responsive ለስልክ ስክሪን */
-@media (max-width: 640px) {
-    #score-screen.screen.active { margin: -20px; padding: 20px; }
-    .google-stats-grid { grid-template-columns: 1fr; gap: 20px; }
-    .stat-right-block { border-left: none; padding-left: 0; border-top: 1px solid #374151; padding-top: 15px; }
-    .google-retry-grid { grid-template-columns: 1fr; }
-    .google-retry-grid .learning-card:last-child:nth-child(odd) { grid-column: span 1; }
-    .strengths-section { flex-direction: column; text-align: center; }
+@media (max-width: 900px) {
+    .premium-dashboard-layout { grid-template-columns: 1fr; }
+    .dashboard-left-panel { border-right: none; padding-right: 0; margin-bottom: 25px; }
+    .expanded-dashboard-view { max-width: 800px !important; }
 }

@@ -11,13 +11,12 @@
 </head>
 <body>
 
-    <div class="quiz-container">
-        <!-- SCREEN 1: WELCOME & DEPARTMENT SELECTION -->
+    <div class="quiz-container" id="main-quiz-container">
+        <!-- 1. WELCOME SCREEN -->
         <div id="welcome-screen" class="screen active">
             <div class="brand-hero">
-                <!-- ተማሪው ሁሌም የሚያየው የተዋበ የሎጎ ማሳያ -->
                 <div class="brand-logo-wrapper">
-                    <img src="logo.png" alt="YOAcademy Logo" class="main-brand-logo">
+                    <img src="logo.jpg" alt="YOAcademy Logo" class="main-brand-logo">
                 </div>
                 <div class="logo-large">YO<span>Academy</span></div>
                 <p class="tagline">NATIONAL EXIT EXAM TESTING PORTAL</p>
@@ -37,18 +36,17 @@
             </div>
         </div>
 
-        <!-- SCREEN 2: BLUEPRINT & CONFIGURATION -->
+        <!-- 2. BLUEPRINT SCREEN -->
         <div id="blueprint-screen" class="screen">
             <div class="brand-hero">
                 <div class="brand-logo-wrapper small-brand-logo">
-                    <img src="logo.png" alt="YOAcademy Logo">
+                    <img src="logo.jpg" alt="YOAcademy Logo">
                 </div>
                 <div class="logo-large">YO<span>Academy</span></div>
                 <div id="blueprint-badge" class="blueprint-badge-text">Ministry of Education Blueprint</div>
             </div>
             <h3 id="blueprint-title-text" style="color: var(--primary); margin-bottom: 15px;">የማለማመጃ ቴሞችን ይምረጡ</h3>
             
-            <!-- ጥያቄ ብዛት መምረጫ (5 ጥያቄዎች ተጨምረዋል) -->
             <div class="config-zone">
                 <label for="question-count-select">⏳ የጥያቄዎች ብዛት ይምረጡ፦</label>
                 <select id="question-count-select" onchange="handleCountChange()">
@@ -66,11 +64,13 @@
             <button onclick="goBackToWelcome()" class="back-link">⬅️ ወደ ዲፓርትመንት መምረጫ ተመለስ</button>
         </div>
 
-        <!-- SCREEN 3: QUIZ CORE AREA -->
+        <!-- 3. QUIZ SCREEN -->
         <div id="quiz-screen" class="screen">
             <header>
                 <div class="quiz-header-left">
-                    <img src="logo.png" alt="YOAcademy Logo" class="header-logo-img">
+                    <div class="header-logo-container-circle">
+                        <img src="logo.jpg" alt="YOAcademy Logo" class="header-logo-img">
+                    </div>
                     <div class="logo">YO<span>Academy</span></div>
                 </div>
                 <div class="quiz-meta">
@@ -85,7 +85,6 @@
 
             <div id="quiz-box"></div>
 
-            <!-- ACTION BUTTONS -->
             <div class="action-buttons-group">
                 <button id="skip-btn" class="btn-action btn-skip" onclick="skipQuestion()">⏩ ሳልመልስ እለፍ (Skip)</button>
                 <button id="submit-btn" class="btn-action btn-verify" onclick="submitAnswer()">✔ መልስ መርምር (Verify)</button>
@@ -93,71 +92,55 @@
             </div>
         </div>
 
-        <!-- SCREEN 4: INTUITIVE ANALYTICS DASHBOARD (GOOGLE QUIZ STYLE) -->
+        <!-- 4. SCORE / DASHBOARD SCREEN -->
         <div id="score-screen" class="screen">
-            <div class="google-score-card">
-                <!-- የኩዊዝ አናት ርዕስ -->
-                <div class="google-score-header">
-                    <div class="header-main-title">
-                        <img src="logo.png" alt="YOAcademy Logo" class="google-result-logo">
-                        <span id="quiz-title-display">YOAcademy Exit Exam Practice Portal</span>
-                    </div>
-                    <h1 class="complete-banner">You did it! Quiz complete.</h1>
-                </div>
-
-                <!-- የውጤት ጎን ለጎን ማሳያ ቦርድ (Grid) -->
-                <div class="google-stats-grid">
-                    <div class="stat-left-block">
-                        <div class="google-stat-box">
-                            <span class="google-label">Score</span>
-                            <span id="google-score-val" class="google-value">0/0</span>
+            <div class="premium-dashboard-layout">
+                
+                <div class="dashboard-left-panel">
+                    <div class="dashboard-brand-header">
+                        <div class="google-logo-container">
+                            <img src="logo.jpg" alt="YOAcademy Logo" class="google-result-logo">
                         </div>
-                        <div class="google-stat-box">
-                            <span class="google-label">Accuracy</span>
-                            <span id="google-accuracy-val" class="google-value">0%</span>
-                        </div>
+                        <div class="dashboard-brand-title">YO<span>Academy</span> Result</div>
                     </div>
                     
-                    <div class="stat-right-block">
-                        <div class="right-row text-success">
-                            <span>Right</span>
-                            <span id="stat-correct-count" class="row-val">0</span>
+                    <h2 class="congrats-title">Quiz Completed!</h2>
+                    
+                    <div class="metrics-card">
+                        <div class="metric-row">
+                            <span class="metric-label">Score</span>
+                            <span id="google-score-val" class="metric-value">0/0</span>
                         </div>
-                        <div class="right-row text-danger">
-                            <span>Wrong</span>
-                            <span id="stat-wrong-count" class="row-val">0</span>
+                        <div class="metric-row">
+                            <span class="metric-label">Accuracy</span>
+                            <span id="google-accuracy-val" class="metric-value">0%</span>
                         </div>
-                        <div class="right-row text-skipped">
-                            <span>Skipped</span>
-                            <span id="stat-skipped-count" class="row-val">0</span>
+                        <div class="metric-divider"></div>
+                        <div class="mini-metrics-grid">
+                            <div class="mini-stat text-success">✔ Correct: <span id="stat-correct-count">0</span></div>
+                            <div class="mini-stat text-danger">❌ Wrong: <span id="stat-wrong-count">0</span></div>
+                            <div class="mini-stat text-skipped">⏩ Skipped: <span id="stat-skipped-count">0</span></div>
                         </div>
+                    </div>
+
+                    <h3 class="panel-section-title">Keep Learning</h3>
+                    <div id="review-zone" class="dashboard-action-list"></div>
+
+                    <div class="dashboard-footer">
+                        <button onclick="resetToHome()" class="btn-google-home">
+                            🔄 ወደ ዋናው መግቢያ ገጽ ተመለስ (Home)
+                        </button>
                     </div>
                 </div>
 
-                <!-- የትንተና ክፍል (Performance Analysis Section) -->
-                <div class="strengths-section">
-                    <div class="strength-icon">📈</div>
-                    <div class="strength-text">
-                        <h3>Strengths and Growth Areas</h3>
-                        <p>Get a summary of your key strengths and discover areas where you can focus your studies.</p>
+                <div class="dashboard-right-panel">
+                    <div class="analytics-header">
+                        <h3>📊 Detailed Question Performance & Explanations</h3>
+                        <p>የተሳሳቱትን እና ያለፉትን ጥያቄዎች ሳይንሳዊ ትንተና እዚህ በጥልቀት ይከልሱ።</p>
                     </div>
-                    <div id="badge-pass-fail-container"></div>
+                    <div id="detailed-explanations-scroll-zone" class="explanations-wrapper-zone"></div>
                 </div>
 
-                <hr class="google-divider">
-
-                <!-- Keep Learning / የመከለሻ አማራጮች ክፍል -->
-                <h3 class="keep-learning-title">Keep Learning</h3>
-                
-                <div id="review-zone" class="google-retry-grid">
-                    <!-- በተኖቹ በጃቫስክሪፕት በኩል እዚህ ይፈጠራሉ -->
-                </div>
-
-                <div class="google-footer-actions">
-                    <button onclick="resetToHome()" class="btn-google-home">
-                        🔄 ወደ ዋናው መግቢያ ገጽ ተመለስ (Home)
-                    </button>
-                </div>
             </div>
         </div>
     </div>
