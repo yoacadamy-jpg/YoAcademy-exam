@@ -93,40 +93,71 @@
             </div>
         </div>
 
-        <!-- SCREEN 4: INTUITIVE ANALYTICS DASHBOARD -->
+        <!-- SCREEN 4: INTUITIVE ANALYTICS DASHBOARD (GOOGLE QUIZ STYLE) -->
         <div id="score-screen" class="screen">
-            <div class="score-card">
-                <div class="brand-logo-wrapper small-brand-logo" style="margin: 0 auto 15px auto;">
-                    <img src="logo.png" alt="YOAcademy Logo">
+            <div class="google-score-card">
+                <!-- የኩዊዝ አናት ርዕስ -->
+                <div class="google-score-header">
+                    <div class="header-main-title">
+                        <img src="logo.png" alt="YOAcademy Logo" class="google-result-logo">
+                        <span id="quiz-title-display">YOAcademy Exit Exam Practice Portal</span>
+                    </div>
+                    <h1 class="complete-banner">You did it! Quiz complete.</h1>
                 </div>
-                <div class="trophy-icon" id="result-emoji">📊</div>
-                <h2 id="result-status-title">የፈተና ማጠቃለያ</h2>
-                <div id="result-badge-container"></div>
+
+                <!-- የውጤት ጎን ለጎን ማሳያ ቦርድ (Grid) -->
+                <div class="google-stats-grid">
+                    <div class="stat-left-block">
+                        <div class="google-stat-box">
+                            <span class="google-label">Score</span>
+                            <span id="google-score-val" class="google-value">0/0</span>
+                        </div>
+                        <div class="google-stat-box">
+                            <span class="google-label">Accuracy</span>
+                            <span id="google-accuracy-val" class="google-value">0%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-right-block">
+                        <div class="right-row text-success">
+                            <span>Right</span>
+                            <span id="stat-correct-count" class="row-val">0</span>
+                        </div>
+                        <div class="right-row text-danger">
+                            <span>Wrong</span>
+                            <span id="stat-wrong-count" class="row-val">0</span>
+                        </div>
+                        <div class="right-row text-skipped">
+                            <span>Skipped</span>
+                            <span id="stat-skipped-count" class="row-val">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- የትንተና ክፍል (Performance Analysis Section) -->
+                <div class="strengths-section">
+                    <div class="strength-icon">📈</div>
+                    <div class="strength-text">
+                        <h3>Strengths and Growth Areas</h3>
+                        <p>Get a summary of your key strengths and discover areas where you can focus your studies.</p>
+                    </div>
+                    <div id="badge-pass-fail-container"></div>
+                </div>
+
+                <hr class="google-divider">
+
+                <!-- Keep Learning / የመከለሻ አማራጮች ክፍል -->
+                <h3 class="keep-learning-title">Keep Learning</h3>
                 
-                <div class="stats-container">
-                    <div class="stat-box success-box">
-                        <span id="stat-correct-count" class="stat-val">0</span>
-                        <span class="stat-lbl">በትክክል የተመለሰ</span>
-                    </div>
-                    <div class="stat-box danger-box">
-                        <span id="stat-wrong-count" class="stat-val">0</span>
-                        <span class="stat-lbl">የተሳሳተ መልስ</span>
-                    </div>
-                    <div class="stat-box skipped-box">
-                        <span id="stat-skipped-count" class="stat-val">0</span>
-                        <span class="stat-lbl">የታለፈ (የተዘለለ)</span>
-                    </div>
+                <div id="review-zone" class="google-retry-grid">
+                    <!-- በተኖቹ በጃቫስክሪፕት በኩል እዚህ ይፈጠራሉ -->
                 </div>
 
-                <div class="percentage-display">
-                    አጠቃላይ ውጤት፡ <span id="final-percentage">0%</span>
+                <div class="google-footer-actions">
+                    <button onclick="resetToHome()" class="btn-google-home">
+                        🔄 ወደ ዋናው መግቢያ ገጽ ተመለስ (Home)
+                    </button>
                 </div>
-
-                <div id="review-zone" class="retry-options-wrapper"></div>
-
-                <button onclick="resetToHome()" class="btn-home-back">
-                    🔄 ወደ ዋናው መግቢያ ገጽ ተመለስ
-                </button>
             </div>
         </div>
     </div>

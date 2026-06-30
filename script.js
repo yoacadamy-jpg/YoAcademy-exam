@@ -20,12 +20,15 @@ function openBlueprint(dept) {
     
     const titleText = document.getElementById('blueprint-title-text');
     const listContainer = document.getElementById('blueprint-list-container');
+    const quizTitleDisplay = document.getElementById('quiz-title-display');
     
     if (dept === 'med_lab') {
-        titleText.innerText = "🔬 የላቦራቶሪ ዘርፍ ኮርሶችን ይምረጡ";
+        titleText.innerText = "🔬 የላቦራቶሪ ዘርф ኮርሶችን ይምረጡ";
+        quizTitleDisplay.innerText = "Medical Laboratory Science Exit Exam Center";
         renderMedLabBlueprints(listContainer);
     } else if (dept === 'business') {
         titleText.innerText = "💼 የቢዝነስ ማኔጅመንት ኮርሶችን ይምረጡ";
+        quizTitleDisplay.innerText = "Business Management Exit Exam Center";
         renderBusinessBlueprints(listContainer);
     }
 }
@@ -188,7 +191,6 @@ function showQuestion() {
     let optC = q.OptionC || q.c || "";
     let optD = q.OptionD || q.d || "";
 
-    // የጥያቄ ቁጥር መለያ እና ኢንተርናሽናል ስታይል በጥያቄ ጽሑፉ ላይ ተካቷል
     let html = `
         <div class="question-header-tags">
             <span class="tag-badge-number">QUESTION ${currentQuestionIndex + 1}</span>
@@ -217,7 +219,7 @@ function selectOption(element, letter) {
 
 function submitAnswer() {
     if (selectedOption === null) {
-        alert("እባክዎ መጀመሪያ አንድ ምርጫ ይምረጡ ወይም ካልፈለጉ 'ሳልመልስ እለፍ' የሚለውን ይጫኑ!");
+        alert("እባክዎ መጀመሪያ አንድ ምርጫ ይምረጡ ወይም ካልፈለጉ 'አልፈው' ይሂዱ!");
         return;
     }
     if (isAnswerRevealed) return;
@@ -247,12 +249,13 @@ function submitAnswer() {
         skippedQuestions = skippedQuestions.filter(item => item !== q);
     } else {
         if (!wrongQuestions.includes(q)) wrongQuestions.push(q);
+        correctQuestions = correctQuestions.filter(item => item !== q);
+        skippedQuestions = skippedQuestions.filter(item => item !== q);
     }
 
     renderFeedbackBox(isCorrect, q.Explanation || q.explanation || "No extended explanation provided.");
 }
 
-// 'ሳልመልስ እለፍ' ሲጫን በቀጥታ (ያለ መልስ መግለጫ) ወደ ቀጣዩ ጥያቄ እንዲሄድ ተደርጓል
 function skipQuestion() {
     clearInterval(questionTimerInterval);
     let q = filteredQuestions[currentQuestionIndex];
@@ -264,7 +267,9 @@ function skipQuestion() {
 
 function autoSkipDueToTimeout() {
     let q = filteredQuestions[currentQuestionIndex];
-    if (!skippedQuestions.includes(q)) skippedQuestions.push(q);
+    if (!skippedQuestions.includes(q) && !correctQuestions.includes(q) && !wrongQuestions.includes(q)) {
+        skippedQuestions.push(q);
+    }
     goToNextOrEnd();
 }
 
@@ -310,47 +315,60 @@ function endQuizAndShowDashboard() {
     let totalQuestions = filteredQuestions.length;
     let percentage = totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0;
 
+    // እሴቶችን በGoogle ስታይል ማሳያ ላይ መጫን
+    document.getElementById('google-score-val').innerText = `${correctCount}/${totalQuestions}`;
+    document.getElementById('google-accuracy-val').innerText = `${percentage}%`;
+    
     document.getElementById('stat-correct-count').innerText = correctCount;
     document.getElementById('stat-wrong-count').innerText = wrongQuestions.length;
     document.getElementById('stat-skipped-count').innerText = skippedQuestions.length;
-    document.getElementById('final-percentage').innerText = `${percentage}%`;
 
-    const badgeContainer = document.getElementById('result-badge-container');
-    const emojiElement = document.getElementById('result-emoji');
-    const statusTitle = document.getElementById('result-status-title');
-
+    // የማለፍ/አለማለፍ ማሳያ
+    const badgeContainer = document.getElementById('badge-pass-fail-container');
     if (percentage >= 50) {
-        badgeContainer.innerHTML = `<span class="badge-status-pass">PASS (አልፈዋል)</span>`;
-        emojiElement.innerText = "🏆";
-        statusTitle.innerText = "እንኳን ደስ አለዎት! ፈተናውን አልፈዋል!";
+        badgeContainer.innerHTML = `<button class="btn-analyze-perf pass-theme">Analyze my performance</button>`;
     } else {
-        badgeContainer.innerHTML = `<span class="badge-status-fail">FAIL (አላለፉም)</span>`;
-        emojiElement.innerText = "📉";
-        statusTitle.innerText = "ውጤቱን ለማሻሻል ድጋሚ ይሞክሩ!";
+        badgeContainer.innerHTML = `<button class="btn-analyze-perf fail-theme">Analyze my performance</button>`;
     }
 
     let reviewZone = document.getElementById('review-zone');
     reviewZone.innerHTML = "";
 
+    // 1. የተሳሳቱ ካሉ
     if (wrongQuestions.length > 0) {
         reviewZone.innerHTML += `
-            <button class="btn-retry-opt btn-retry-wrong" onclick="retrySpecificSet('wrong')">
-                ❌ የተሳሳቱትን ብቻ ድጋሚ ሥራ (${wrongQuestions.length} ጥያቄዎች)
-            </button>
+            <div class="learning-card card-wrong" onclick="retrySpecificSet('wrong')">
+                <div class="card-icon">❌</div>
+                <div class="card-info">
+                    <h4>Review Wrong Questions</h4>
+                    <p>Create a focus test from the ${wrongQuestions.length} questions you missed to master key concepts.</p>
+                </div>
+            </div>
         `;
     }
+
+    // 2. የታለፉ ካሉ
     if (skippedQuestions.length > 0) {
         reviewZone.innerHTML += `
-            <button class="btn-retry-opt btn-retry-skipped" onclick="retrySpecificSet('skipped')">
-                ⏩ የታለፉትን (የተዘለሉትን) ብቻ ድጋሚ ሥራ (${skippedQuestions.length} ጥያቄዎች)
-            </button>
+            <div class="learning-card card-skipped" onclick="retrySpecificSet('skipped')">
+                <div class="card-icon">⏩</div>
+                <div class="card-info">
+                    <h4>Study Skipped Items</h4>
+                    <p>Review the ${skippedQuestions.length} skipped questions you left unanswered during the quiz.</p>
+                </div>
+            </div>
         `;
     }
     
+    // 3. ሙሉውን እንደገና ለመጀመር (More Questions)
     reviewZone.innerHTML += `
-        <button class="btn-retry-opt btn-retry-all" onclick="retrySpecificSet('all')">
-            🔄 ሙሉውን ጥያቄ በድጋሚ ፈትን (Restart Quiz)
-        </button>
+        <div class="learning-card card-all" onclick="retrySpecificSet('all')">
+            <div class="card-icon">🔄</div>
+            <div class="card-info">
+                <h4>More Questions / Restart</h4>
+                <p>Generate a completely fresh session or reshuffle the current quiz material from scratch.</p>
+            </div>
+        </div>
     `;
 }
 

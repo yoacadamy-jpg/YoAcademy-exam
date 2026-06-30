@@ -157,29 +157,6 @@ header {
 .btn-next { background: var(--primary); color: white; }
 .btn-next:hover { background: #1d4ed8; }
 
-/* Analytics & Badges */
-.badge-status-pass { background: #d1fae5; color: #065f46; padding: 6px 20px; border-radius: 20px; font-weight: 700; font-size: 15px; display: inline-block; margin-bottom: 20px; }
-.badge-status-fail { background: #fee2e2; color: #991b1b; padding: 6px 20px; border-radius: 20px; font-weight: 700; font-size: 15px; display: inline-block; margin-bottom: 20px; }
-
-.stats-container { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 20px 0; }
-.stat-box { padding: 14px; border-radius: 14px; text-align: center; border: 1px solid #e2e8f0; }
-.success-box { background: #ecfdf5; }
-.danger-box { background: #fef2f2; }
-.skipped-box { background: #f9fafb; }
-.stat-val { display: block; font-size: 24px; font-weight: 700; }
-.stat-lbl { font-size: 11px; color: var(--text-light); font-weight: 600; }
-
-.percentage-display { font-size: 20px; font-weight: 700; margin-bottom: 25px; color: var(--text-dark); }
-.percentage-display span { color: var(--accent); font-size: 24px; }
-
-/* Retry Wrapper */
-.retry-options-wrapper { background: #f8fafc; padding: 20px; border-radius: 16px; border: 1px solid #e2e8f0; margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px; }
-.btn-retry-opt { width: 100%; padding: 12px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 14px; }
-.btn-retry-wrong { background: var(--danger); color: white; }
-.btn-retry-skipped { background: #4b5563; color: white; }
-.btn-retry-all { background: var(--primary); color: white; }
-
-.btn-home-back { background: none; border: none; color: #4b5563; font-weight: 600; cursor: pointer; text-decoration: underline; font-size: 14px; margin-top: 10px; }
 .back-link { background: none; border: none; color: #4b5563; font-weight: 600; cursor: pointer; text-decoration: underline; margin-top: 15px; }
 
 .status-banner { padding: 12px; border-radius: 8px; font-weight: 700; text-align: center; margin-top: 15px; }
@@ -207,11 +184,257 @@ header {
     color: #4b5563; 
     line-height: 1.6;
 }
-/* Scrollbar ውበት ማስተካከያ */
-.scrollable-rationale-content::-webkit-scrollbar {
-    width: 5px;
+.scrollable-rationale-content::-webkit-scrollbar { width: 5px; }
+.scrollable-rationale-content::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+
+/* =======================================================
+   GOOGLE QUIZ STYLE PREMIUM SCORE DASHBOARD (DARK THEME)
+   ======================================================= */
+
+.google-result-logo {
+    width: 35px !important;
+    height: 35px !important;
+    object-fit: contain;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    display: inline-block;
+    vertical-align: middle;
 }
-.scrollable-rationale-content::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 4px;
+
+#score-screen.screen.active {
+    background-color: #111827; /* Dark Grey/Black background like image 11.JPG */
+    color: #ffffff;
+    border-radius: 24px;
+    padding: 35px;
+    margin: -40px; /* ሳጥኑን ሙሉ በሙሉ ጥቁር ለማድረግ */
+    animation: fadeIn 0.4s ease;
+}
+
+.google-score-card {
+    text-align: left;
+}
+
+.google-score-header {
+    margin-bottom: 25px;
+}
+
+.header-main-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    color: #9ca3af;
+    font-weight: 500;
+}
+
+.complete-banner {
+    font-size: 32px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-top: 10px;
+    letter-spacing: -0.5px;
+}
+
+/* የውጤት ጎን ለጎን አቀማመጥ (Grid) */
+.google-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    background: #1f2937;
+    padding: 25px;
+    border-radius: 16px;
+    margin-bottom: 25px;
+}
+
+.stat-left-block {
+    display: flex;
+    gap: 50px;
+}
+
+.google-stat-box {
+    display: flex;
+    flex-direction: column;
+}
+
+.google-label {
+    font-size: 14px;
+    color: #9ca3af;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.google-value {
+    font-size: 40px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+/* የቀኝ በኩል ዝርዝር ረድፎች */
+.stat-right-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    border-left: 1px solid #374151;
+    padding-left: 40px;
+}
+
+.right-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    font-weight: 500;
+    color: #d1d5db;
+}
+
+.text-success span:first-child { color: #34d399; }
+.text-danger span:first-child { color: #f87171; }
+.text-skipped span:first-child { color: #9ca3af; }
+
+.row-val {
+    font-weight: 700;
+    color: #ffffff;
+}
+
+/* Performance Box */
+.strengths-section {
+    display: flex;
+    align-items: center;
+    background: #1f2937;
+    padding: 20px;
+    border-radius: 16px;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.strength-icon {
+    font-size: 24px;
+    background: #374151;
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.strength-text {
+    flex: 1;
+}
+
+.strength-text h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 3px;
+}
+
+.strength-text p {
+    font-size: 13.5px;
+    color: #9ca3af;
+    line-height: 1.5;
+}
+
+/* የትንተና ሰማያዊ በተን */
+.btn-analyze-perf {
+    background: #0284c7;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 24px;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn-analyze-perf:hover { background: #0369a1; }
+.pass-theme { background: #059669; }
+.fail-theme { background: #0284c7; }
+
+.google-divider {
+    border: 0;
+    border-top: 1px solid #374151;
+    margin: 25px 0;
+}
+
+.keep-learning-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #ffffff;
+}
+
+/* የታችኛው የመከለሻ ካርዶች (Keep Learning Grid) */
+.google-retry-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.google-retry-grid .learning-card:last-child:nth-child(odd) {
+    grid-column: span 2;
+}
+
+.learning-card {
+    background: #1f2937;
+    border: 1px solid #374151;
+    border-radius: 14px;
+    padding: 18px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.learning-card:hover {
+    transform: translateY(-2px);
+    background: rgba(59, 130, 246, 0.15);
+    border-color: #3b82f6;
+}
+
+.card-icon {
+    font-size: 20px;
+    background: #374151;
+    padding: 8px;
+    border-radius: 10px;
+}
+
+.card-info h4 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 4px;
+}
+
+.card-info p {
+    font-size: 12.5px;
+    color: #9ca3af;
+    line-height: 1.5;
+}
+
+.google-footer-actions {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.btn-google-home {
+    background: none;
+    border: none;
+    color: #3b82f6;
+    font-weight: 600;
+    font-size: 14.5px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.btn-google-home:hover {
+    color: #60a5fa;
+}
+
+/* Responsive ለስልክ ስክሪን */
+@media (max-width: 640px) {
+    #score-screen.screen.active { margin: -20px; padding: 20px; }
+    .google-stats-grid { grid-template-columns: 1fr; gap: 20px; }
+    .stat-right-block { border-left: none; padding-left: 0; border-top: 1px solid #374151; padding-top: 15px; }
+    .google-retry-grid { grid-template-columns: 1fr; }
+    .google-retry-grid .learning-card:last-child:nth-child(odd) { grid-column: span 1; }
+    .strengths-section { flex-direction: column; text-align: center; }
 }
